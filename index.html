@@ -10,15 +10,49 @@
             font-family: sans-serif;
             background-color: black;
             font-size: 24px;
-            color: #999;
+            color: #aaa;
             padding: 40px 90px;
         }
+
+        #clock {
+            font-size: smaller;
+        }
+
+        #header {
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            color: #fff;
+        }
+
+        #header * {
+            flex-shrink: 1;
+        }
+
+        #xkcd h5 {
+            margin: 0;
+        }
+
+        #xkcd img {
+            width: 50%;
+            margin: 10px 0;
+        }
+
+        #xkcd div {
+            font-style: italic;
+        }
+
     </style>
 </head>
 <body>
+    <div id="header">
+        <h1>eScience Lab</h1> <span id="clock">-</span>
+    </div>
+
     <div id="wrapper">
-        <h1>eScience Lab</h1>
-        <span id="clock"></span>
+        <div id="xkcd"></div>
     </div>
 
     <script>
@@ -28,6 +62,25 @@
         }
 
         setInterval(updateClock, 1000);
+
+        // Latest XKCD - Official API endpoint does not support CORS, so using this 3rd party one.
+        fetch('https://xkcd.vercel.app/?comic=latest')
+            .then((response) => response.json())
+            .then((data) => {
+                const div = document.getElementById('xkcd');
+                const title = document.createElement('h5')
+                title.innerText = data.title;
+
+                const img = document.createElement('img')
+                img.src = data.img;
+
+                const alt = document.createElement('div')
+                alt.innerText = data.alt;
+
+                div.appendChild(title);
+                div.appendChild(img);
+                div.appendChild(alt);
+            });
     </script>
 </body>
 
